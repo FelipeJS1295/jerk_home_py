@@ -1,0 +1,85 @@
+{% extends 'configuracion/config_base.html' %}
+
+{% block config_title %}
+    Mantenedores
+{% endblock config_title %}
+
+{% block config_content %}
+<div class="row">
+    <!-- Insumos -->
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center py-4">
+                <div class="display-4 mb-3 text-primary">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+                <h5 class="card-title">Insumos</h5>
+                <p class="card-text text-muted">Gestión de materiales y suministros</p>
+                <a href="{% url 'configuracion:insumos' %}" class="btn btn-primary mt-3">
+                    <i class="bi bi-arrow-right"></i> Acceder
+                </a>
+            </div>
+            <div class="card-footer bg-light border-0">
+                <small class="text-muted">Total: {{ total_insumos|default:"0" }} insumos</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Proveedores -->
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center py-4">
+                <div class="display-4 mb-3 text-success">
+                    <i class="bi bi-truck"></i>
+                </div>
+                <h5 class="card-title">Proveedores</h5>
+                <p class="card-text text-muted">Gestión de proveedores</p>
+                <a href="{% url 'configuracion:proveedores' %}" class="btn btn-success mt-3">
+                    <i class="bi bi-arrow-right"></i> Acceder
+                </a>
+            </div>
+            <div class="card-footer bg-light border-0">
+                <small class="text-muted">Total: {{ total_proveedores|default:"0" }} proveedores</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clientes -->
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center py-4">
+                <div class="display-4 mb-3 text-info">
+                    <i class="bi bi-people"></i>
+                </div>
+                <h5 class="card-title">Clientes</h5>
+                <p class="card-text text-muted">Gestión de clientes</p>
+                <a href="{% url 'configuracion:clientes' %}" class="btn btn-info mt-3">
+                    <i class="bi bi-arrow-right"></i> Acceder
+                </a>
+            </div>
+            <div class="card-footer bg-light border-0">
+                <small class="text-muted">Total: {{ total_clientes|default:"0" }} clientes</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Productos -->
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center py-4">
+                <div class="display-4 mb-3 text-warning">
+                    <i class="bi bi-archive"></i>
+                </div>
+                <h5 class="card-title">Productos</h5>
+                <p class="card-text text-muted">Gestión de productos</p>
+                <a href="{% url 'configuracion:productos' %}" class="btn btn-warning mt-3">
+                    <i class="bi bi-arrow-right"></i> Acceder
+                </a>
+            </div>
+            <div class="card-footer bg-light border-0">
+                <small class="text-muted">Total: {{ total_productos|default:"0" }} productos</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

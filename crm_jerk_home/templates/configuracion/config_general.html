@@ -1,0 +1,64 @@
+{% extends 'configuracion/config_base.html' %}
+
+{% block config_title %}Configuración General{% endblock %}
+
+{% block config_content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Información de la Empresa</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{% url 'config_general_update' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Nombre de la Empresa</label>
+                        <input type="text" class="form-control" name="company_name" 
+                               value="{{ config.company_name }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">RUT Empresa</label>
+                        <input type="text" class="form-control" name="company_rut" 
+                               value="{{ config.company_rut }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Dirección</label>
+                        <input type="text" class="form-control" name="company_address" 
+                               value="{{ config.company_address }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Configuración del Sistema</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{% url 'config_system_update' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Zona Horaria</label>
+                        <select class="form-select" name="timezone">
+                            <option value="America/Santiago" 
+                                    {% if config.timezone == 'America/Santiago' %}selected{% endif %}>
+                                Chile (Santiago)
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input type="checkbox" class="form-check-input" name="enable_notifications" 
+                               {% if config.enable_notifications %}checked{% endif %}>
+                        <label class="form-check-label">Habilitar Notificaciones</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

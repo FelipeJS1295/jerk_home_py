@@ -1,0 +1,213 @@
+{% extends 'configuracion/config_base.html' %}
+
+{% block config_title %}{{ titulo }}{% endblock %}
+
+{% block config_content %}
+<div class="card">
+    <div class="card-body">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            
+            <div class="row">
+                <!-- Código -->
+                <div class="col-md-4 mb-3">
+                    <label for="{{ form.codigo.id_for_label }}" class="form-label">Código *</label>
+                    {{ form.codigo.errors }}
+                    <input type="text" 
+                           name="{{ form.codigo.name }}" 
+                           id="{{ form.codigo.id_for_label }}" 
+                           class="form-control {% if form.codigo.errors %}is-invalid{% endif %}"
+                           value="{{ form.codigo.value|default:'' }}"
+                           required>
+                </div>
+
+                <!-- Nombre -->
+                <div class="col-md-8 mb-3">
+                    <label for="{{ form.nombre.id_for_label }}" class="form-label">Nombre *</label>
+                    {{ form.nombre.errors }}
+                    <input type="text" 
+                           name="{{ form.nombre.name }}" 
+                           id="{{ form.nombre.id_for_label }}" 
+                           class="form-control {% if form.nombre.errors %}is-invalid{% endif %}"
+                           value="{{ form.nombre.value|default:'' }}"
+                           required>
+                </div>
+
+                <!-- Proveedor -->
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.proveedor.id_for_label }}" class="form-label">Proveedor *</label>
+                    {{ form.proveedor.errors }}
+                    <select name="{{ form.proveedor.name }}"
+                            id="{{ form.proveedor.id_for_label }}"
+                            class="form-select {% if form.proveedor.errors %}is-invalid{% endif %}"
+                            required>
+                        <option value="">Seleccione un proveedor</option>
+                        {% for choice in form.proveedor.field.choices %}
+                            <option value="{{ choice.0 }}" {% if form.proveedor.value|stringformat:"s" == choice.0|stringformat:"s" %}selected{% endif %}>
+                                {{ choice.1 }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Unidad de Medida -->
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.unidad_medida.id_for_label }}" class="form-label">Unidad de Medida *</label>
+                    {{ form.unidad_medida.errors }}
+                    <select name="{{ form.unidad_medida.name }}"
+                            id="{{ form.unidad_medida.id_for_label }}"
+                            class="form-select {% if form.unidad_medida.errors %}is-invalid{% endif %}"
+                            required>
+                        <option value="">Seleccione una unidad</option>
+                        {% for choice in form.unidad_medida.field.choices %}
+                            <option value="{{ choice.0 }}" {% if form.unidad_medida.value|stringformat:"s" == choice.0|stringformat:"s" %}selected{% endif %}>
+                                {{ choice.1 }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Precio Costo -->
+                <div class="col-md-4 mb-3">
+                    <label for="{{ form.precio_costo.id_for_label }}" class="form-label">Precio Costo *</label>
+                    {{ form.precio_costo.errors }}
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="number" 
+                               name="{{ form.precio_costo.name }}" 
+                               id="{{ form.precio_costo.id_for_label }}" 
+                               class="form-control {% if form.precio_costo.errors %}is-invalid{% endif %}"
+                               value="{{ form.precio_costo.value|default:'' }}"
+                               required
+                               min="0"
+                               step="1">
+                    </div>
+                </div>
+
+                <!-- Precio Venta -->
+                <div class="col-md-4 mb-3">
+                    <label for="{{ form.precio_venta.id_for_label }}" class="form-label">Precio Venta *</label>
+                    {{ form.precio_venta.errors }}
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="number" 
+                               name="{{ form.precio_venta.name }}" 
+                               id="{{ form.precio_venta.id_for_label }}" 
+                               class="form-control {% if form.precio_venta.errors %}is-invalid{% endif %}"
+                               value="{{ form.precio_venta.value|default:'' }}"
+                               required
+                               min="0"
+                               step="1">
+                    </div>
+                </div>
+
+                <!-- Cálculo de Margen -->
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Margen</label>
+                    <div class="input-group">
+                        <input type="text" 
+                               id="margenCalculo" 
+                               class="form-control"
+                               readonly>
+                        <span class="input-group-text">%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save"></i> 
+                    {{ titulo }}
+                </button>
+                <a href="{% url 'configuracion:insumos' %}" class="btn btn-secondary">
+                    <i class="bi bi-x-circle"></i>
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const precioCostoInput = document.getElementById('{{ form.precio_costo.id_for_label }}');
+    const precioVentaInput = document.getElementById('{{ form.precio_venta.id_for_label }}');
+    const margenCalculo = document.getElementById('margenCalculo');
+
+    function calcularMargen() {
+        const costo = parseFloat(precioCostoInput.value) || 0;
+        const venta = parseFloat(precioVentaInput.value) || 0;
+
+        if (venta > 0 && costo > 0) {
+            const margen = ((venta - costo) / venta) * 100;
+            margenCalculo.value = margen.toFixed(1);
+            
+            // Cambiar color según el margen
+            if (margen < 20) {
+                margenCalculo.style.color = 'red';
+            } else if (margen < 30) {
+                margenCalculo.style.color = 'orange';
+            } else {
+                margenCalculo.style.color = 'green';
+            }
+        } else {
+            margenCalculo.value = '0.0';
+            margenCalculo.style.color = 'black';
+        }
+    }
+
+    // Validar que precio venta no sea menor al costo
+    function validarPrecios() {
+        const costo = parseFloat(precioCostoInput.value) || 0;
+        const venta = parseFloat(precioVentaInput.value) || 0;
+
+        if (venta < costo) {
+            precioVentaInput.setCustomValidity('El precio de venta no puede ser menor al costo');
+        } else {
+            precioVentaInput.setCustomValidity('');
+        }
+    }
+
+    precioCostoInput.addEventListener('input', function() {
+        calcularMargen();
+        validarPrecios();
+    });
+
+    precioVentaInput.addEventListener('input', function() {
+        calcularMargen();
+        validarPrecios();
+    });
+
+    // Calcular margen inicial si hay valores
+    calcularMargen();
+    
+    // Formato de números
+    const formatoNumero = new Intl.NumberFormat('es-CL');
+    
+    function formatearInput(input) {
+        const valor = input.value.replace(/\D/g, '');
+        if (valor) {
+            input.value = formatoNumero.format(valor);
+        }
+    }
+
+    // Validación del formulario
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+
+    // Inicializar tooltips de Bootstrap
+    const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    tooltips.forEach(tooltip => {
+        new bootstrap.Tooltip(tooltip);
+    });
+});
+</script>
+{% endblock %}

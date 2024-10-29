@@ -1,0 +1,1 @@
+web: gunicorn crm_jerk_home.wsgi

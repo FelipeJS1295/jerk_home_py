@@ -1,0 +1,71 @@
+{% extends 'configuracion/config_base.html' %}
+
+{% block config_title %}{{ titulo }}{% endblock %}
+
+{% block config_content %}
+<div class="card">
+    <div class="card-body">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.rut.id_for_label }}" class="form-label">RUT *</label>
+                    {{ form.rut.errors }}
+                    <input type="text" 
+                           name="{{ form.rut.name }}" 
+                           id="{{ form.rut.id_for_label }}" 
+                           class="form-control {% if form.rut.errors %}is-invalid{% endif %}"
+                           value="{{ form.rut.value|default:'' }}"
+                           required>
+                    {% if form.rut.help_text %}
+                        <div class="form-text">{{ form.rut.help_text }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.nombre.id_for_label }}" class="form-label">Nombre *</label>
+                    {{ form.nombre.errors }}
+                    <input type="text" 
+                           name="{{ form.nombre.name }}" 
+                           id="{{ form.nombre.id_for_label }}" 
+                           class="form-control {% if form.nombre.errors %}is-invalid{% endif %}"
+                           value="{{ form.nombre.value|default:'' }}"
+                           required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.contacto.id_for_label }}" class="form-label">Contacto *</label>
+                    {{ form.contacto.errors }}
+                    <input type="text" 
+                           name="{{ form.contacto.name }}" 
+                           id="{{ form.contacto.id_for_label }}" 
+                           class="form-control {% if form.contacto.errors %}is-invalid{% endif %}"
+                           value="{{ form.contacto.value|default:'' }}"
+                           required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.email.id_for_label }}" class="form-label">Email *</label>
+                    {{ form.email.errors }}
+                    <input type="email" 
+                           name="{{ form.email.name }}" 
+                           id="{{ form.email.id_for_label }}" 
+                           class="form-control {% if form.email.errors %}is-invalid{% endif %}"
+                           value="{{ form.email.value|default:'' }}"
+                           required>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">
+                    {{ titulo }}
+                </button>
+                <a href="{% url 'configuracion:clientes' %}" class="btn btn-secondary">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

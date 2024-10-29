@@ -1,0 +1,124 @@
+{% extends 'configuracion/config_base.html' %}
+
+{% block config_title %}{{ titulo }}{% endblock %}
+
+{% block config_content %}
+<div class="card">
+    <div class="card-body">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.rut.id_for_label }}" class="form-label">RUT *</label>
+                    {{ form.rut.errors }}
+                    <input type="text" 
+                           name="{{ form.rut.name }}" 
+                           id="{{ form.rut.id_for_label }}" 
+                           class="form-control {% if form.rut.errors %}is-invalid{% endif %}"
+                           value="{{ form.rut.value|default:'' }}"
+                           required>
+                    {% if form.rut.help_text %}
+                        <div class="form-text">{{ form.rut.help_text }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.first_name.id_for_label }}" class="form-label">Nombre *</label>
+                    {{ form.first_name.errors }}
+                    <input type="text" 
+                           name="{{ form.first_name.name }}" 
+                           id="{{ form.first_name.id_for_label }}" 
+                           class="form-control {% if form.first_name.errors %}is-invalid{% endif %}"
+                           value="{{ form.first_name.value|default:'' }}"
+                           required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.last_name.id_for_label }}" class="form-label">Apellido *</label>
+                    {{ form.last_name.errors }}
+                    <input type="text" 
+                           name="{{ form.last_name.name }}" 
+                           id="{{ form.last_name.id_for_label }}" 
+                           class="form-control {% if form.last_name.errors %}is-invalid{% endif %}"
+                           value="{{ form.last_name.value|default:'' }}"
+                           required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.fecha_nacimiento.id_for_label }}" class="form-label">Fecha de Nacimiento</label>
+                    {{ form.fecha_nacimiento.errors }}
+                    <input type="date" 
+                           name="{{ form.fecha_nacimiento.name }}" 
+                           id="{{ form.fecha_nacimiento.id_for_label }}" 
+                           class="form-control {% if form.fecha_nacimiento.errors %}is-invalid{% endif %}"
+                           value="{{ form.fecha_nacimiento.value|default:'' }}">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.direccion.id_for_label }}" class="form-label">Dirección</label>
+                    {{ form.direccion.errors }}
+                    <input type="text" 
+                           name="{{ form.direccion.name }}" 
+                           id="{{ form.direccion.id_for_label }}" 
+                           class="form-control {% if form.direccion.errors %}is-invalid{% endif %}"
+                           value="{{ form.direccion.value|default:'' }}">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.telefono.id_for_label }}" class="form-label">Teléfono</label>
+                    {{ form.telefono.errors }}
+                    <input type="text" 
+                           name="{{ form.telefono.name }}" 
+                           id="{{ form.telefono.id_for_label }}" 
+                           class="form-control {% if form.telefono.errors %}is-invalid{% endif %}"
+                           value="{{ form.telefono.value|default:'' }}">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.afp.id_for_label }}" class="form-label">AFP</label>
+                    {{ form.afp.errors }}
+                    {{ form.afp }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.salud.id_for_label }}" class="form-label">Entidad de Salud</label>
+                    {{ form.salud.errors }}
+                    {{ form.salud }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.cargo.id_for_label }}" class="form-label">Cargo</label>
+                    {{ form.cargo.errors }}
+                    {{ form.cargo }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.tipo_sueldo.id_for_label }}" class="form-label">Tipo de Sueldo</label>
+                    {{ form.tipo_sueldo.errors }}
+                    {{ form.tipo_sueldo }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.fecha_ingreso.id_for_label }}" class="form-label">Fecha de Ingreso</label>
+                    {{ form.fecha_ingreso.errors }}
+                    <input type="date" 
+                           name="{{ form.fecha_ingreso.name }}" 
+                           id="{{ form.fecha_ingreso.id_for_label }}" 
+                           class="form-control {% if form.fecha_ingreso.errors %}is-invalid{% endif %}"
+                           value="{{ form.fecha_ingreso.value|default:'' }}">
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">
+                    {{ titulo }}
+                </button>
+                <a href="{% url 'configuracion:usuarios' %}" class="btn btn-secondary">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

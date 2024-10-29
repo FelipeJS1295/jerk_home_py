@@ -1,0 +1,31 @@
+{% extends 'configuracion/config_base.html' %}
+ 
+{% block config_title %}Panel de Configuración{% endblock %} 
+
+{% block config_content %}
+<div class="row">
+  <div class="col-md-6 col-lg-3 mb-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="bi bi-people text-primary"></i>
+          Usuarios Activos
+        </h5>
+        <p class="display-4">{{ usuarios_activos }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-3 mb-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="bi bi-building text-success"></i>
+          Total Departamentos
+        </h5>
+        <p class="display-4">{{ total_departamentos }}</p>
+      </div>
+    </div>
+  </div>
+  <!-- Más widgets según necesites -->
+</div>
+{% endblock %}

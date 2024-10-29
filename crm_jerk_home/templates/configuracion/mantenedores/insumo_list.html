@@ -1,0 +1,167 @@
+{% extends 'configuracion/config_base.html' %}
+
+{% block config_title %}Insumos{% endblock %}
+
+{% block config_content %}
+<div class="card">
+    <div class="card-body">
+        <!-- Header con búsqueda y botón de nuevo -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex gap-2 align-items-center">
+                <h5 class="card-title mb-0">Lista de Insumos</h5>
+                <div class="input-group" style="width: 300px;">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Buscar insumo...">
+                    <button class="btn btn-outline-secondary" type="button">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
+            <a href="{% url 'configuracion:insumo_create' %}" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Nuevo Insumo
+            </a>
+        </div>
+
+        <!-- Tabla de Insumos -->
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Proveedor</th>
+                        <th>Unidad Medida</th>
+                        <th class="text-end">Precio Costo</th>
+                        <th class="text-end">Precio Venta</th>
+                        <th class="text-end">Margen</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for insumo in insumos %}
+                    <tr>
+                        <td>{{ insumo.codigo }}</td>
+                        <td>{{ insumo.nombre }}</td>
+                        <td>{{ insumo.proveedor.nombre }}</td>
+                        <td>{{ insumo.unidad_medida.nombre }}</td>
+                        <td class="text-end">${{ insumo.precio_costo|floatformat:0|default:'0' }}</td>
+                        <td class="text-end">${{ insumo.precio_venta|floatformat:0|default:'0' }}</td>
+                        <td class="text-end">
+                            {% with margen=insumo.get_margen %}
+                            <span class="badge {% if margen < 20 %}bg-danger{% elif margen < 30 %}bg-warning{% else %}bg-success{% endif %}">
+                                {{ margen }}%
+                            </span>
+                            {% endwith %}
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-sm btn-outline-secondary" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#detalleModal{{ insumo.id }}">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <a href="{% url 'configuracion:insumo_update' insumo.id %}" 
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <button type="button" 
+                                        class="btn btn-sm btn-outline-danger"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal{{ insumo.id }}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+
+                            <!-- Modal de Detalle -->
+                            <div class="modal fade" id="detalleModal{{ insumo.id }}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Detalle del Insumo</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <dl class="row">
+                                                <dt class="col-sm-4">Código</dt>
+                                                <dd class="col-sm-8">{{ insumo.codigo }}</dd>
+
+                                                <dt class="col-sm-4">Nombre</dt>
+                                                <dd class="col-sm-8">{{ insumo.nombre }}</dd>
+
+                                                <dt class="col-sm-4">Proveedor</dt>
+                                                <dd class="col-sm-8">{{ insumo.proveedor.nombre }}</dd>
+
+                                                <dt class="col-sm-4">Unidad</dt>
+                                                <dd class="col-sm-8">{{ insumo.unidad_medida.nombre }}</dd>
+
+                                                <dt class="col-sm-4">Precio Costo</dt>
+                                                <dd class="col-sm-8">${{ insumo.precio_costo|floatformat:0 }}</dd>
+
+                                                <dt class="col-sm-4">Precio Venta</dt>
+                                                <dd class="col-sm-8">${{ insumo.precio_venta|floatformat:0 }}</dd>
+
+                                                <dt class="col-sm-4">Margen</dt>
+                                                <dd class="col-sm-8">{{ margen|floatformat:1 }}%</dd>
+
+                                                <dt class="col-sm-4">Última actualización</dt>
+                                                <dd class="col-sm-8">{{ insumo.updated_at|date:"d/m/Y H:i" }}</dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal de Eliminación -->
+                            <div class="modal fade" id="deleteModal{{ insumo.id }}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Confirmar Eliminación</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>¿Está seguro que desea eliminar el insumo <strong>{{ insumo.nombre }}</strong>?</p>
+                                            <p class="text-danger">Esta acción no se puede deshacer.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <form action="{% url 'configuracion:insumo_delete' insumo.id %}" method="post" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center">No hay insumos registrados</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Funcionalidad de búsqueda
+    const searchInput = document.getElementById('searchInput');
+    const table = document.querySelector('table');
+    const rows = table.querySelectorAll('tbody tr');
+
+    searchInput.addEventListener('keyup', function(e) {
+        const searchText = e.target.value.toLowerCase();
+        
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchText) ? '' : 'none';
+        });
+    });
+});
+</script>
+{% endblock %}

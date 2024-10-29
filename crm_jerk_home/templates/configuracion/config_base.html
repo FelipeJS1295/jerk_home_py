@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% block config_title %}Configuración{% endblock config_title %}
+{% endblock title %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Menú lateral -->
+        <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <div class="position-sticky pt-3">
+                <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span>Configuración</span>
+                </h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_tab == 'home' %}active{% endif %}" 
+                           href="{% url 'configuracion:home' %}">
+                            <i class="bi bi-house-door"></i>
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_tab == 'usuarios' %}active{% endif %}" 
+                           href="{% url 'configuracion:usuarios' %}">
+                            <i class="bi bi-people"></i>
+                            Usuarios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_tab == 'mantenedores' %}active{% endif %}" 
+                           href="{% url 'configuracion:mantenedores' %}">
+                            <i class="bi bi-tools"></i>
+                            Mantenedores
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_tab == 'general' %}active{% endif %}" 
+                           href="{% url 'configuracion:general' %}">
+                            <i class="bi bi-gear"></i>
+                            General
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="col-md-9 col-lg-10 ms-sm-auto px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">{{ active_section_title|default:"Configuración" }}</h1>
+            </div>
+            {% block config_content %}{% endblock config_content %}
+        </div>
+    </div>
+</div>
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<style>
+    .sidebar {
+        box-shadow: 0 0 10px rgba(0,0,0,.1);
+        min-height: calc(100vh - 56px);
+    }
+    .sidebar .nav-link {
+        font-weight: 500;
+        color: #333;
+    }
+    .sidebar .nav-link.active {
+        color: #2470dc;
+        background-color: #e9ecef;
+    }
+    .sidebar .nav-link:hover {
+        color: #2470dc;
+        background-color: #f8f9fa;
+    }
+    .sidebar .nav-link i {
+        margin-right: 8px;
+    }
+</style>
+{% endblock extra_css %}
+{% endblock content %}

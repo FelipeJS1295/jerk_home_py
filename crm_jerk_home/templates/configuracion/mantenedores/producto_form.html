@@ -1,0 +1,221 @@
+{% extends 'configuracion/config_base.html' %}
+
+{% block config_title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <form method="post" id="productoForm">
+            {% csrf_token %}
+            
+            <!-- Datos básicos del producto -->
+             <h1>Crear Producto</h1>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">SKU</label>
+                    <input type="text" name="sku" class="form-control" required>
+                </div>
+                <div class="col-md-8">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" name="nombre" class="form-control" required>
+                </div>
+            </div>
+
+            <!-- Nombres esqueleto -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Nombre Esqueleto</label>
+                    <input type="text" name="nombre_esqueleto" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Nombre Armado</label>
+                    <input type="text" name="nombre_armado_esqueleto" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Nombre Corte</label>
+                    <input type="text" name="nombre_corte_esqueleto" class="form-control" required>
+                </div>
+            </div>
+
+            <!-- Costos -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Costo Costura</label>
+                    <input type="number" name="costo_costura" class="form-control" min="0" value="0">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Costo Tapicería</label>
+                    <input type="number" name="costo_tapiceria" class="form-control" min="0" value="0">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Costo Corte</label>
+                    <input type="number" name="costo_corte" class="form-control" min="0" value="0">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Costo Armado</label>
+                    <input type="number" name="costo_armado" class="form-control" min="0" value="0">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Costo Corte y Armado</label>
+                    <input type="number" name="costo_corte_armado" class="form-control" min="0" value="0">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Precio Venta Promedio</label>
+                    <input type="number" name="precio_venta_promedio" class="form-control" min="0" value="0">
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped" id="insumosTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px;">
+                                <input type="checkbox" class="form-check-input" id="selectAll">
+                            </th>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Proveedor</th>
+                            <th>Unidad</th>
+                            <th class="text-end">Precio</th>
+                            <th style="width: 150px;">Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for insumo in insumos %}
+                        <tr>
+                            <td>
+                                <input type="checkbox" 
+                                       class="form-check-input insumo-check" 
+                                       name="insumo_selected[]" 
+                                       value="{{ insumo.id }}">
+                            </td>
+                            <td>{{ insumo.codigo }}</td>
+                            <td>{{ insumo.nombre }}</td>
+                            <td>{{ insumo.proveedor.nombre }}</td>
+                            <td>{{ insumo.unidad_medida.simbolo }}</td>
+                            <td class="text-end">${{ insumo.precio_costo|floatformat:0 }}</td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input type="number" 
+                                           name="cantidad_{{ insumo.id }}" 
+                                           class="form-control cantidad-input"
+                                           min="0.01" 
+                                           step="0.01" 
+                                           value="1">
+                                    <span class="input-group-text">{{ insumo.unidad_medida.simbolo }}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save"></i> Guardar Producto
+                </button>
+                <a href="{% url 'configuracion:productos' %}" class="btn btn-secondary">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Referencias a elementos
+        const selectAll = document.getElementById('selectAll');
+        const searchInput = document.getElementById('searchInsumo');
+        const insumosTable = document.getElementById('insumosTable');
+        const cantidadInputs = document.querySelectorAll('.cantidad-input');
+        
+        // Habilitar/Deshabilitar input de cantidad
+        function toggleCantidadInput(checkbox) {
+            const row = checkbox.closest('tr');
+            const cantidadInput = row.querySelector('.cantidad-input');
+            if (checkbox.checked) {
+                cantidadInput.removeAttribute('disabled');
+            } else {
+                cantidadInput.setAttribute('disabled', 'disabled');
+                cantidadInput.value = 1;
+            }
+        }
+    
+        // Seleccionar/Deseleccionar todos
+        selectAll.addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.insumo-check');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+                toggleCantidadInput(checkbox);
+            });
+        });
+    
+        // Manejar checkboxes individuales
+        document.querySelectorAll('.insumo-check').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                toggleCantidadInput(this);
+                updateSelectAll();
+            });
+        });
+    
+        // Actualizar estado de "Seleccionar todos"
+        function updateSelectAll() {
+            const totalCheckboxes = document.querySelectorAll('.insumo-check').length;
+            const checkedCheckboxes = document.querySelectorAll('.insumo-check:checked').length;
+            selectAll.checked = totalCheckboxes === checkedCheckboxes;
+        }
+    
+        // Búsqueda de insumos
+        searchInput.addEventListener('input', function() {
+            const searchText = this.value.toLowerCase().trim();
+            const rows = insumosTable.querySelectorAll('tbody tr');
+    
+            rows.forEach(row => {
+                const textContent = row.textContent.toLowerCase();
+                row.style.display = textContent.includes(searchText) ? '' : 'none';
+            });
+        });
+    
+        // Validación del formulario
+        document.getElementById('productoForm').addEventListener('submit', function(e) {
+            const selectedInsumos = document.querySelectorAll('.insumo-check:checked');
+            
+            if (selectedInsumos.length === 0) {
+                e.preventDefault();
+                alert('Debe seleccionar al menos un insumo para el producto');
+                return;
+            }
+    
+            // Validar cantidades
+            let hasInvalidQuantity = false;
+            selectedInsumos.forEach(checkbox => {
+                const row = checkbox.closest('tr');
+                const cantidadInput = row.querySelector('.cantidad-input');
+                const cantidad = parseFloat(cantidadInput.value);
+                
+                if (isNaN(cantidad) || cantidad <= 0) {
+                    hasInvalidQuantity = true;
+                    cantidadInput.classList.add('is-invalid');
+                } else {
+                    cantidadInput.classList.remove('is-invalid');
+                }
+            });
+    
+            if (hasInvalidQuantity) {
+                e.preventDefault();
+                alert('Por favor, ingrese cantidades válidas para todos los insumos seleccionados');
+            }
+        });
+    
+        // Inicializar el estado de los inputs de cantidad
+        document.querySelectorAll('.insumo-check').forEach(toggleCantidadInput);
+    });
+    </script>
+{% endblock %}

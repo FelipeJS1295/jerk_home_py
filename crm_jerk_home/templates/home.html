@@ -1,0 +1,109 @@
+{% extends 'base.html' %} {% block title %}Inicio - Jerk Home{% endblock %}
+{%block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="mb-4">Bienvenido a Jerk Home</h1>
+
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Información del Usuario</h5>
+          <div class="row">
+            <div class="col-md-6">
+              <p>
+                <strong>Nombre:</strong> {{
+                user.get_full_name|default:user.username }}
+              </p>
+              <p>
+                <strong>RUT:</strong> {{ user.rut|default:"No registrado" }}
+              </p>
+              <p>
+                <strong>Email:</strong> {{ user.email|default:"No registrado" }}
+              </p>
+            </div>
+            <div class="col-md-6">
+              <p>
+                <strong>Cargo:</strong> {{ user.cargo|default:"No asignado" }}
+              </p>
+              <p>
+                <strong>AFP:</strong> {{ user.afp|default:"No registrada" }}
+              </p>
+              <p>
+                <strong>Salud:</strong> {{ user.salud|default:"No registrada" }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Inventario</h5>
+              <p class="card-text">
+                Gestiona el inventario de muebles y materiales.
+              </p>
+              <a href="#" class="btn btn-primary">Acceder al Inventario</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Producción</h5>
+              <p class="card-text">
+                Control y seguimiento de la producción de muebles.
+              </p>
+              <a href="#" class="btn btn-primary">Ver Producción</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Ventas</h5>
+              <p class="card-text">Registro y seguimiento de ventas.</p>
+              <a href="#" class="btn btn-primary">Gestionar Ventas</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Empleados</h5>
+              <p class="card-text">Gestión de personal y recursos humanos.</p>
+              <a href="#" class="btn btn-primary">Ver Empleados</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Reportes</h5>
+              <p class="card-text">Informes y estadísticas del negocio.</p>
+              <a href="#" class="btn btn-primary">Ver Reportes</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Configuración</h5>
+              <p class="card-text">Ajustes y configuración del sistema.</p>
+              <a href="{% url 'configuracion:home' %}" class="btn btn-primary"
+                >Ir a Configuración</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+[
+    {
+        "model": "mantenedores.unidadmedida",
+        "pk": 1,
+        "fields": {
+            "nombre": "Litros",
+            "simbolo": "L",
+            "active": true,
+            "created_at": "2024-10-28T00:00:00Z",
+            "updated_at": "2024-10-28T00:00:00Z"
+        }
+    },
+    {
+        "model": "mantenedores.unidadmedida",
+        "pk": 2,
+        "fields": {
+            "nombre": "Kilos",
+            "simbolo": "Kg",
+            "active": true,
+            "created_at": "2024-10-28T00:00:00Z",
+            "updated_at": "2024-10-28T00:00:00Z"
+        }
+    },
+    {
+        "model": "mantenedores.unidadmedida",
+        "pk": 3,
+        "fields": {
+            "nombre": "Unidad",
+            "simbolo": "Un",
+            "active": true,
+            "created_at": "2024-10-28T00:00:00Z",
+            "updated_at": "2024-10-28T00:00:00Z"
+        }
+    },
+    {
+        "model": "mantenedores.unidadmedida",
+        "pk": 4,
+        "fields": {
+            "nombre": "Metros",
+            "simbolo": "m",
+            "active": true,
+            "created_at": "2024-10-28T00:00:00Z",
+            "updated_at": "2024-10-28T00:00:00Z"
+        }
+    },
+    {
+        "model": "mantenedores.unidadmedida",
+        "pk": 5,
+        "fields": {
+            "nombre": "Paquete",
+            "simbolo": "Pq",
+            "active": true,
+            "created_at": "2024-10-28T00:00:00Z",
+            "updated_at": "2024-10-28T00:00:00Z"
+        }
+    },
+    {
+        "model": "mantenedores.unidadmedida",
+        "pk": 6,
+        "fields": {
+            "nombre": "Metros cuadrados",
+            "simbolo": "m²",
+            "active": true,
+            "created_at": "2024-10-28T00:00:00Z",
+            "updated_at": "2024-10-28T00:00:00Z"
+        }
+    },
+    {
+        "model": "mantenedores.unidadmedida",
+        "pk": 7,
+        "fields": {
+            "nombre": "Centímetros",
+            "simbolo": "cm",
+            "active": true,
+            "created_at": "2024-10-28T00:00:00Z",
+            "updated_at": "2024-10-28T00:00:00Z"
+        }
+    }
+]
